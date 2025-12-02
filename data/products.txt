@@ -1,0 +1,262 @@
+Product Catalog and Information
+
+ELECTRONICS
+
+Smartphones
+- iPhone 15 Pro Max (256GB) - $1,199
+  Features: A17 Pro chip, ProMotion display, 48MP camera, titanium design
+  Warranty: 1 year AppleCare, extendable to 2 years
+  Colors: Natural Titanium, Blue Titanium, White Titanium, Black Titanium
+  
+- Samsung Galaxy S24 Ultra (512GB) - $1,299
+  Features: Snapdragon 8 Gen 3, 200MP camera, S Pen included, AI features
+  Warranty: 1 year Samsung Care, extendable
+  Colors: Titanium Gray, Titanium Black, Titanium Violet, Titanium Yellow
+
+- Google Pixel 8 Pro (256GB) - $999
+  Features: Google Tensor G3, AI camera features, 7 years of updates
+  Warranty: 1 year Google Preferred Care available
+  Colors: Obsidian, Porcelain, Bay
+
+Laptops
+- MacBook Air M3 (13-inch, 16GB RAM, 512GB SSD) - $1,499
+  Features: M3 chip, up to 18 hours battery, Liquid Retina display
+  Warranty: 1 year AppleCare+, extendable to 3 years
+  Colors: Midnight, Starlight, Space Gray, Silver
+
+- Dell XPS 15 (Intel i7, 32GB RAM, 1TB SSD) - $1,899
+  Features: 15.6" OLED display, NVIDIA RTX 4060, Windows 11 Pro
+  Warranty: 2 years Dell Premium Support
+  Colors: Platinum Silver, Graphite
+
+- Lenovo ThinkPad X1 Carbon Gen 11 - $1,699
+  Features: Intel i7-1365U, 16GB RAM, 512GB SSD, 14" display
+  Warranty: 3 years on-site service
+  Colors: Black
+
+Tablets
+- iPad Pro 12.9" (M2, 256GB, WiFi) - $1,099
+  Features: M2 chip, Liquid Retina XDR display, Face ID
+  Warranty: 1 year AppleCare+
+  
+- Samsung Galaxy Tab S9 Ultra - $1,199
+  Features: 14.6" Dynamic AMOLED display, Snapdragon 8 Gen 2, S Pen
+  Warranty: 1 year Samsung Care+
+
+Headphones & Audio
+- Sony WH-1000XM5 Wireless Headphones - $399
+  Features: Industry-leading noise cancellation, 30hr battery, premium sound
+  Warranty: 1 year manufacturer warranty
+  Colors: Black, Silver
+  
+- Apple AirPods Pro (2nd Gen) - $249
+  Features: Active noise cancellation, spatial audio, MagSafe charging
+  Warranty: 1 year AppleCare
+  
+- Bose QuietComfort Ultra Earbuds - $299
+  Features: World-class noise cancellation, spatial audio, 6hr battery
+  Warranty: 1 year Bose warranty
+  Colors: Black, White Smoke, Moonstone Blue
+
+HOME & LIVING
+
+Kitchen Appliances
+- Ninja Foodi 14-in-1 Air Fryer - $199
+  Features: 8-quart capacity, 14 cooking functions, non-stick basket
+  Warranty: 1 year manufacturer warranty
+  
+- KitchenAid Pro 600 Stand Mixer - $449
+  Features: 6-quart bowl, 10 speeds, 575-watt motor
+  Warranty: 1 year full replacement
+  Colors: Empire Red, Onyx Black, Silver, White
+  
+- Nespresso Vertuo Next Coffee Maker - $179
+  Features: One-touch brewing, 5 cup sizes, sustainable design
+  Warranty: 2 years Nespresso warranty
+  Colors: Black, Red, White
+
+Smart Home
+- Amazon Echo Show 10 (3rd Gen) - $249
+  Features: 10.1" HD screen, motion tracking, Alexa built-in
+  Warranty: 1 year Amazon warranty
+  
+- Google Nest Learning Thermostat - $249
+  Features: Auto-schedule, energy saving, works with Google Assistant
+  Warranty: 2 years Google warranty
+  
+- Ring Video Doorbell Pro 2 - $269
+  Features: 1536p HD video, 3D motion detection, Alexa compatible
+  Warranty: 1 year Ring warranty
+
+Furniture
+- IKEA KALLAX Storage Unit 4x4 - $139
+  Features: 16 compartments, versatile design, easy assembly
+  Dimensions: 57 7/8x57 7/8"
+  Colors: White, Black-Brown, Birch Effect
+  Assembly: Required, instructions included
+  
+- Herman Miller Aeron Chair (Size B) - $1,495
+  Features: Ergonomic design, adjustable lumbar support, 12-year warranty
+  Warranty: 12 years full coverage
+  Colors: Carbon, Mineral
+  
+- West Elm Mid-Century Sofa (82") - $1,799
+  Features: Solid wood legs, performance velvet upholstery, deep seats
+  Warranty: 1 year furniture warranty
+  Colors: Elephant Gray, Ink Blue, Moss
+
+FASHION
+
+Men's Clothing
+- Levi's 501 Original Fit Jeans - $69
+  Sizes: 28-42 waist, inseams 30-36
+  Material: 100% cotton denim
+  Colors: Dark Stonewash, Medium Stonewash, Black
+  
+- Nike Dri-FIT Running Shirt - $35
+  Sizes: S, M, L, XL, XXL
+  Material: 100% polyester moisture-wicking fabric
+  Colors: Black, Navy, Red, White, Gray
+  
+- The North Face Thermoball Jacket - $199
+  Sizes: S-XXL
+  Features: Synthetic insulation, water-resistant, packable
+  Colors: TNF Black, New Taupe Green, Summit Navy
+
+Women's Clothing
+- Lululemon Align High-Rise Pant 25" - $98
+  Sizes: 0-20
+  Material: Nulu fabric (buttery soft, 4-way stretch)
+  Colors: Black, Navy, Graphite Gray, various seasonal colors
+  
+- Zara Knit Oversized Sweater - $49
+  Sizes: XS, S, M, L, XL
+  Material: 70% acrylic, 30% wool
+  Colors: Cream, Black, Camel, Burgundy
+  
+- Athleta Rainier Tight - $89
+  Sizes: XXS-XXL
+  Features: UPF 50+, moisture-wicking, hidden pocket
+  Colors: Black, Navy, Plum
+
+Shoes
+- Nike Air Max 270 - $150
+  Sizes: Men's 7-15, Women's 5-12
+  Features: Max Air unit, mesh upper, everyday comfort
+  Colors: Black/White, Triple Black, White/Black
+  
+- Adidas Ultraboost 23 - $190
+  Sizes: Men's 7-14, Women's 5-11
+  Features: Boost cushioning, Primeknit upper, continental rubber outsole
+  Colors: Core Black, Cloud White, various limited editions
+  
+- Allbirds Wool Runners - $98
+  Sizes: Men's 8-14, Women's 5-11
+  Features: Merino wool, machine washable, sustainable materials
+  Colors: Natural Gray, Tuke, Kauri
+
+SPORTS & FITNESS
+
+Exercise Equipment
+- Peloton Bike+ - $2,495
+  Features: 23.8" rotating touchscreen, auto-resistance, immersive classes
+  Warranty: 12 months limited
+  Delivery: White glove delivery included
+  
+- Bowflex SelectTech 552 Adjustable Dumbbells - $399
+  Features: Adjusts from 5-52.5 lbs, space-saving design
+  Warranty: 2 years Bowflex warranty
+  
+- TRX HOME2 Suspension Training System - $169
+  Features: Portable, full-body workouts, door anchor included
+  Warranty: 1 year manufacturer warranty
+
+Outdoor Gear
+- Yeti Tundra 45 Hard Cooler - $325
+  Features: 3" insulation, bear-resistant, rotomolded construction
+  Warranty: 5 years Yeti warranty
+  Colors: White, Navy, Tan, Charcoal
+  
+- Patagonia Nano Puff Jacket - $249
+  Sizes: XS-XXL (Men's and Women's)
+  Features: PrimaLoft insulation, wind/water-resistant, packable
+  Colors: Black, Nouveau Green, Classic Navy
+  Warranty: Lifetime Ironclad Guarantee
+
+BOOKS & MEDIA
+
+Bestsellers
+- "Atomic Habits" by James Clear - $16.99 (Paperback)
+  Category: Self-Help, Productivity
+  Pages: 320
+  Also available: Hardcover ($27), Audiobook ($19.99), eBook ($12.99)
+  
+- "The Thursday Murder Club" by Richard Osman - $14.99 (Paperback)
+  Category: Mystery, Fiction
+  Pages: 368
+  Series: Book 1 of 4
+  
+- "Educated" by Tara Westover - $13.99 (Paperback)
+  Category: Memoir, Biography
+  Pages: 352
+  Awards: Goodreads Choice Award Winner
+
+Magazines (Subscription)
+- National Geographic - $29/year (12 issues)
+- The Economist - $189/year (51 issues)
+- Wired - $24.99/year (12 issues)
+
+TOYS & GAMES
+
+Children's Toys
+- LEGO Star Wars Millennium Falcon - $169.99
+  Ages: 9+
+  Pieces: 1,351
+  Features: Buildable minifigures, detailed interior
+  
+- Barbie Dreamhouse (3 stories) - $199.99
+  Ages: 3+
+  Features: 8 rooms, working elevator, pool with slide
+  Dimensions: 43" H x 41" W
+  
+- Nintendo Switch OLED Model - $349.99
+  Features: 7" OLED screen, enhanced audio, 64GB storage
+  Warranty: 1 year Nintendo warranty
+  Colors: White, Neon Red/Blue
+
+Board Games
+- Catan Board Game - $54.99
+  Players: 3-4 (expandable to 6)
+  Ages: 10+
+  Playing Time: 60-120 minutes
+  
+- Ticket to Ride - $49.99
+  Players: 2-5
+  Ages: 8+
+  Playing Time: 30-60 minutes
+
+PRODUCT AVAILABILITY
+
+In Stock: Ships within 1-2 business days
+Low Stock: Limited quantity available, order soon
+Pre-Order: Coming soon, reserve yours now
+Out of Stock: Currently unavailable, sign up for restock notification
+
+PRICE MATCHING
+
+We offer price matching within 14 days of purchase:
+- Must be identical product (model, color, size)
+- Competitor must be authorized retailer
+- Price match does not apply to clearance or marketplace items
+- Submit price match request with proof of lower price
+
+PRODUCT WARRANTIES
+
+All manufacturer warranties are honored. Extended warranties available for purchase at checkout for most electronics and appliances.
+
+WARRANTY DETAILS BY CATEGORY:
+- Electronics: 1-2 years manufacturer warranty
+- Appliances: 1-3 years parts and labor
+- Furniture: 1-12 years depending on manufacturer
+- Clothing: 30-day quality guarantee
+- Toys: 90-day manufacturer warranty
