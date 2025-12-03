@@ -2,13 +2,22 @@ import os
 from typing import Optional
 from dotenv import load_dotenv
 
+import streamlit as st
+
 load_dotenv()
 
 
 class Config:
-    OPENAI_API_KEY: Optional[str] = os.getenv("OPENAI_API_KEY")
-    GROQ_API_KEY: Optional[str] = os.getenv("GROQ_API_KEY")
-    GEMINI_API_KEY: Optional[str] = os.getenv("GEMINI_API_KEY")
+    # Try to get from Streamlit secrets first (for Cloud), then environment variables (for local)
+    def _get_secret(key: str, default: Optional[str] = None) -> Optional[str]:
+        try:
+            return st.secrets.get(key, os.getenv(key, default))
+        except (FileNotFoundError, AttributeError):
+            return os.getenv(key, default)
+
+    OPENAI_API_KEY: Optional[str] = _get_secret("OPENAI_API_KEY")
+    GROQ_API_KEY: Optional[str] = _get_secret("GROQ_API_KEY")
+    GEMINI_API_KEY: Optional[str] = _get_secret("GEMINI_API_KEY")
     
     DEFAULT_LLM_PROVIDER: str = "groq"
     
