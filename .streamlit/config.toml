@@ -2,8 +2,9 @@
 showErrorDetails = false
 
 [server]
+headless = true
 maxUploadSize = 200
-enableXsrfProtection = false
+enableXsrfProtection = true
 
 [browser]
 gatherUsageStats = false
