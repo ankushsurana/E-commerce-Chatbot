@@ -1,21 +1,19 @@
 # Core Framework
 streamlit==1.29.0
 
-# LLM Providers
-openai>=1.35.0
-groq>=0.9.0
-google-generativeai>=0.7.0
+# LLM Providers (pinned to stable versions)
+openai==1.35.0
+groq==0.9.0
+google-generativeai==0.7.2
 
-# Embeddings and Vector Store
-sentence-transformers>=2.3.0
+# Embeddings (proven versions for Streamlit Cloud)
+sentence-transformers==2.3.1
 faiss-cpu==1.7.4
-huggingface-hub>=0.20.0
 
 # Web Search
-duckduckgo-search>=6.1.0
+duckduckgo-search==6.1.7
 
-# Utilities
+# Essential utilities only
 python-dotenv==1.0.0
-numpy<2.0.0
-pypdf>=3.17.0
-httpx>=0.27.0
+numpy==1.24.3
+pypdf==3.17.1
