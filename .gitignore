@@ -44,7 +44,8 @@ ENV/
 
 # Data Storage (User chat sessions - privacy protection)
 data/chats/
-*.json
+!data/product_catalog.json
+
 
 # Vector Store (Can be regenerated)
 data/vector_store/

@@ -1,123 +1,54 @@
-"""
-Configuration Management for E-commerce Chatbot
-Manages API keys, model settings, and application constants securely.
-
-SECURITY NOTICE:
-- ALL API keys are loaded from environment variables
-- NEVER hardcode API keys in this file or any other source file
-- API keys should be set in .env file (not committed to Git)
-- Use .env.example as a template for creating your .env file
-"""
-
 import os
 from typing import Optional
 from dotenv import load_dotenv
 
-# Load environment variables from .env file
 load_dotenv()
 
 
 class Config:
-    """
-    Centralized configuration management for the E-commerce Chatbot
-    
-    All API keys and sensitive configuration should be managed through environment variables.
-    This ensures security and flexibility across different deployment environments.
-    """
-    
-    # ============================================================================
-    # API KEYS - LOADED FROM ENVIRONMENT VARIABLES
-    # ============================================================================
-    # These are loaded from .env file or system environment variables
-    # NEVER hardcode actual API keys here
-    
     OPENAI_API_KEY: Optional[str] = os.getenv("OPENAI_API_KEY")
     GROQ_API_KEY: Optional[str] = os.getenv("GROQ_API_KEY")
     GEMINI_API_KEY: Optional[str] = os.getenv("GEMINI_API_KEY")
     
-    # ============================================================================
-    # LLM PROVIDER SETTINGS
-    # ============================================================================
-    
-    # Default LLM provider to use (options: "openai", "groq", "gemini")
     DEFAULT_LLM_PROVIDER: str = "groq"
     
-    # Model names for each provider
-    OPENAI_MODEL: str = "gpt-3.5-turbo"  # Alternative: "gpt-4", "gpt-4-turbo"
-    GROQ_MODEL: str = "llama-3.1-8b-instant"  # Alternative: "mixtral-8x7b-32768", "llama-3.1-8b-instant"
-    GEMINI_MODEL: str = "gemini-1.5-flash"  # Alternative: "gemini-pro", "gemini-1.5-pro"
+    OPENAI_MODEL: str = "gpt-3.5-turbo"  
+    GROQ_MODEL: str = "llama-3.1-8b-instant" 
+    GEMINI_MODEL: str = "gemini-1.5-flash" 
     
-    # ============================================================================
-    # MODEL PARAMETERS
-    # ============================================================================
-    
-    # Temperature: Controls randomness (0.0 = deterministic, 1.0 = creative)
     TEMPERATURE: float = 0.7
     
-    # Maximum tokens in response
     MAX_TOKENS: int = 1000
     
-    # Top-p sampling for nucleus sampling
     TOP_P: float = 0.9
     
-    # ============================================================================
-    # RESPONSE MODE SETTINGS
-    # ============================================================================
-    
-    # Maximum tokens for concise responses
     CONCISE_MAX_TOKENS: int = 150
     
-    # Maximum tokens for detailed responses
     DETAILED_MAX_TOKENS: int = 1000
     
-    # ============================================================================
-    # RAG (RETRIEVAL-AUGMENTED GENERATION) SETTINGS
-    # ============================================================================
-    
-    # Embedding model for vector embeddings
     EMBEDDING_MODEL: str = "all-MiniLM-L6-v2"
     
-    # Text chunking parameters
-    CHUNK_SIZE: int = 500  # Characters per chunk
-    CHUNK_OVERLAP: int = 50  # Overlap between chunks
+    CHUNK_SIZE: int = 500 
+    CHUNK_OVERLAP: int = 50 
     
-    # Retrieval parameters
-    TOP_K_RETRIEVAL: int = 3  # Number of chunks to retrieve
-    SIMILARITY_THRESHOLD: float = 0.5  # Minimum similarity score
+    TOP_K_RETRIEVAL: int = 3 
+    SIMILARITY_THRESHOLD: float = 0.5 
     
-    # ============================================================================
-    # FILE PATHS
-    # ============================================================================
-    
-    # Directory containing knowledge base documents
     DATA_DIR: str = "data"
     
-    # Path to save/load vector store
-    VECTOR_STORE_PATH: str = "data/vector_store"
+    VECTOR_STORE_PATH: str = os.getenv("VECTOR_STORE_PATH", "data/vector_store")
     
-    # ============================================================================
-    # WEB SEARCH SETTINGS
-    # ============================================================================
+    CHAT_STORAGE_DIR: str = os.getenv("CHAT_STORAGE_DIR", "data/chats")
     
-    # Maximum number of web search results to retrieve
-    MAX_SEARCH_RESULTS: int = 5
+    PRODUCT_CATALOG_PATH: str = os.getenv("PRODUCT_CATALOG_PATH", "data/product_catalog.json")
     
-    # Timeout for web search requests (seconds)
-    SEARCH_TIMEOUT: int = 10
+    MAX_SEARCH_RESULTS: int = int(os.getenv("MAX_SEARCH_RESULTS", "5"))
     
-    # ============================================================================
-    # APPLICATION SETTINGS
-    # ============================================================================
+    SEARCH_TIMEOUT: int = int(os.getenv("SEARCH_TIMEOUT", "10"))
     
-    # Application title
     APP_TITLE: str = "🛍️ E-commerce Customer Support Chatbot"
     
-    # Application description
     APP_DESCRIPTION: str = "Intelligent assistant for product inquiries, order status, returns, and promotions"
-    
-    # ============================================================================
-    # SYSTEM PROMPTS
-    # ============================================================================
     
     CONCISE_SYSTEM_PROMPT: str = """You are a helpful e-commerce customer support assistant. 
 Provide SHORT, CONCISE, and ACCURATE answers. Keep responses under 2-3 sentences.
@@ -134,21 +65,39 @@ Base your answers STRICTLY on the provided context but do not explicitly mention
 Include relevant details and step-by-step instructions where applicable.
 Be professional, friendly, and ensure the customer understands the information clearly."""
     
-    # ============================================================================
+    MAX_RECOMMENDATIONS: int = int(os.getenv("MAX_RECOMMENDATIONS", "5"))
+    RECOMMENDATION_DISPLAY_LIMIT: int = int(os.getenv("RECOMMENDATION_DISPLAY_LIMIT", "3"))
+    
+    HIGH_PURCHASE_INTENT_THRESHOLD: float = float(os.getenv("HIGH_PURCHASE_INTENT_THRESHOLD", "0.5"))
+    
+    MIN_MESSAGES_FOR_RECOMMENDATION: int = int(os.getenv("MIN_MESSAGES_FOR_RECOMMENDATION", "3"))
+    ENGAGED_USER_RECOMMENDATION_INTERVAL: int = int(os.getenv("ENGAGED_USER_RECOMMENDATION_INTERVAL", "7"))
+    
+    
+    HIGH_ENGAGEMENT_MESSAGE_COUNT: int = int(os.getenv("HIGH_ENGAGEMENT_MESSAGE_COUNT", "5"))
+    MEDIUM_ENGAGEMENT_MESSAGE_COUNT: int = int(os.getenv("MEDIUM_ENGAGEMENT_MESSAGE_COUNT", "2"))
+    
+    INTENT_MATCH_DIVISOR: float = float(os.getenv("INTENT_MATCH_DIVISOR", "3.0"))
+    
+    CATEGORY_MATCH_WEIGHT: float = float(os.getenv("CATEGORY_MATCH_WEIGHT", "0.3"))
+    RATING_WEIGHT: float = float(os.getenv("RATING_WEIGHT", "0.3"))
+    STOCK_AVAILABILITY_WEIGHT: float = float(os.getenv("STOCK_AVAILABILITY_WEIGHT", "0.2"))
+    
+    RECOMMENDATION_TEMPERATURE: float = float(os.getenv("RECOMMENDATION_TEMPERATURE", "0.7"))
+    RECOMMENDATION_MAX_TOKENS: int = int(os.getenv("RECOMMENDATION_MAX_TOKENS", "100"))
+    
+    CONTEXTUALIZATION_TEMPERATURE: float = float(os.getenv("CONTEXTUALIZATION_TEMPERATURE", "0.1"))
+    CONTEXTUALIZATION_MAX_TOKENS: int = int(os.getenv("CONTEXTUALIZATION_MAX_TOKENS", "100"))
+    
+    REFINEMENT_TEMPERATURE: float = float(os.getenv("REFINEMENT_TEMPERATURE", "0.1"))
+    REFINEMENT_MAX_TOKENS: int = int(os.getenv("REFINEMENT_MAX_TOKENS", "100"))
+    
+    DEFAULT_RETENTION_DAYS: int = int(os.getenv("DEFAULT_RETENTION_DAYS", "90"))
+    
     # HELPER METHODS
-    # ============================================================================
     
     @classmethod
     def validate_api_key(cls, provider: str) -> bool:
-        """
-        Validate that API key exists for the specified provider
-        
-        Args:
-            provider: LLM provider name ("openai", "groq", "gemini")
-            
-        Returns:
-            bool: True if API key is configured, False otherwise
-        """
         key_map = {
             "openai": cls.OPENAI_API_KEY,
             "groq": cls.GROQ_API_KEY,
@@ -160,15 +109,6 @@ Be professional, friendly, and ensure the customer understands the information c
     
     @classmethod
     def get_api_key(cls, provider: str) -> Optional[str]:
-        """
-        Get API key for the specified provider
-        
-        Args:
-            provider: LLM provider name
-            
-        Returns:
-            API key string or None if not configured
-        """
         key_map = {
             "openai": cls.OPENAI_API_KEY,
             "groq": cls.GROQ_API_KEY,
@@ -178,15 +118,6 @@ Be professional, friendly, and ensure the customer understands the information c
     
     @classmethod
     def get_model_name(cls, provider: str) -> str:
-        """
-        Get model name for the specified provider
-        
-        Args:
-            provider: LLM provider name
-            
-        Returns:
-            Model name string
-        """
         model_map = {
             "openai": cls.OPENAI_MODEL,
             "groq": cls.GROQ_MODEL,
@@ -196,38 +127,15 @@ Be professional, friendly, and ensure the customer understands the information c
     
     @classmethod
     def get_system_prompt(cls, mode: str = "detailed") -> str:
-        """
-        Get system prompt based on response mode
-        
-        Args:
-            mode: Response mode ("concise" or "detailed")
-            
-        Returns:
-            System prompt string
-        """
         return cls.CONCISE_SYSTEM_PROMPT if mode.lower() == "concise" else cls.DETAILED_SYSTEM_PROMPT
     
     @classmethod
     def get_max_tokens(cls, mode: str = "detailed") -> int:
-        """
-        Get max tokens based on response mode
-        
-        Args:
-            mode: Response mode ("concise" or "detailed")
-            
-        Returns:
-            Maximum token count
-        """
+
         return cls.CONCISE_MAX_TOKENS if mode.lower() == "concise" else cls.DETAILED_MAX_TOKENS
     
     @classmethod
     def get_available_providers(cls) -> list:
-        """
-        Get list of available LLM providers (those with API keys configured)
-        
-        Returns:
-            List of provider names that have valid API keys
-        """
         available = []
         if cls.validate_api_key("openai"):
             available.append("openai")
@@ -241,16 +149,7 @@ Be professional, friendly, and ensure the customer understands the information c
 # Create singleton instance for easy import
 config = Config()
 
-
-# ============================================================================
-# CONFIGURATION VALIDATION
-# ============================================================================
-
 def validate_configuration():
-    """
-    Validate that at least one LLM provider is configured
-    Returns a tuple of (is_valid, error_message)
-    """
     available_providers = config.get_available_providers()
     
     if not available_providers:
@@ -276,9 +175,6 @@ def validate_configuration():
     return True, f"✅ Configured providers: {', '.join(available_providers)}"
 
 
-# ============================================================================
-# USAGE EXAMPLE
-# ============================================================================
 """
 To use this configuration in your code:
 

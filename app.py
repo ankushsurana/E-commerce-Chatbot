@@ -1,14 +1,9 @@
-"""
-E-commerce Customer Support Chatbot - Main Streamlit Application
-Production-ready chatbot with RAG, web search, and multi-LLM support
-"""
-
 import streamlit as st
 import logging
 import os
 from typing import Optional
 
-# Import custom modules
+
 from config.config import config
 from models.llm import LLMClient
 from utils.rag import RAGPipeline
@@ -16,13 +11,12 @@ from utils.web_search import search_web, format_search_results
 from utils.logger import setup_logger
 from utils.helpers import format_response, refine_query, contextualize_query
 from utils.chat_manager import ChatManager
+from utils.recommendation_engine import RecommendationEngine
 
-# Initialize logger
 logger = setup_logger(__name__, level=logging.INFO)
 
 
 def initialize_rag_pipeline() -> Optional[RAGPipeline]:
-    """Initialize RAG pipeline with error handling"""
     try:
         with st.spinner("Loading knowledge base..."):
             rag = RAGPipeline()
@@ -36,15 +30,6 @@ def initialize_rag_pipeline() -> Optional[RAGPipeline]:
 
 
 def get_llm_client(provider: str) -> Optional[LLMClient]:
-    """
-    Get LLM client with error handling
-    
-    Args:
-        provider: LLM provider name
-        
-    Returns:
-        LLM client or None if failed
-    """
     try:
         client = LLMClient(provider=provider)
         logger.info(f"LLM client initialized: {provider}")
@@ -64,7 +49,7 @@ def generate_response(
     chat_history: list = None
 ) -> tuple[str, list]:
     """
-    Generate response with RAG and optional web search
+   Generate response with RAG and optional web search
     
     Args:
         llm_client: LLM client instance
@@ -81,8 +66,6 @@ def generate_response(
         context = ""
         sources = []
         
-        # 1. Contextualize Query (Conversational RAG)
-        # Rewrite query based on history to handle follow-ups
         search_query = user_message
         if chat_history and llm_client:
             try:
@@ -91,8 +74,6 @@ def generate_response(
             except Exception as e:
                 logger.warning(f"Contextualization failed: {str(e)}")
 
-        # 2. Refine Query (NLP Correction)
-        # Correct spelling/grammar on the contextualized query
         refined_query = search_query
         if llm_client:
             try:
@@ -101,15 +82,11 @@ def generate_response(
             except Exception as e:
                 logger.warning(f"Query refinement failed: {str(e)}")
         
-        # 3. Retrieval (RAG)
         if rag_pipeline:
             try:
-                # Use refined, contextualized query for retrieval
                 rag_context = rag_pipeline.get_context_for_query(refined_query)
                 if rag_context:
-                    # Changed label to be more neutral for natural responses
                     context = f"**Context Information:**\n{rag_context}\n\n"
-                    # Extract sources from RAG results
                     results = rag_pipeline.retrieve(refined_query)
                     sources = [{"type": "knowledge_base", "source": meta['source']} 
                               for _, meta, _ in results]
@@ -117,15 +94,12 @@ def generate_response(
             except Exception as e:
                 logger.warning(f"RAG retrieval failed: {str(e)}")
         
-        # 4. Web Search (Fallback/Optional)
         if use_web_search or (not context and use_web_search):
             try:
                 with st.spinner("🔍 Searching the web..."):
-                    # Use refined query for web search too
                     search_results = search_web(refined_query, max_results=3)
                     if search_results:
                         web_context = format_search_results(search_results)
-                        # Changed label to be more neutral
                         context += f"**Additional Context:**\n{web_context}\n\n"
                         sources.extend([{"type": "web", "source": r['link'], "title": r['title']} 
                                        for r in search_results])
@@ -133,13 +107,10 @@ def generate_response(
             except Exception as e:
                 logger.warning(f"Web search failed: {str(e)}")
         
-        # 5. Generate Answer
-        # Build prompt with context and ORIGINAL user message (to maintain conversational flow)
         enhanced_message = user_message
         if context:
             enhanced_message = f"{context}**User Question:** {user_message}"
         
-        # Generate response
         response = llm_client.chat(
             user_message=enhanced_message,
             conversation_history=chat_history or [],
@@ -156,18 +127,31 @@ def generate_response(
 
 
 def display_sources(sources: list):
-    """Display sources in expandable section (Web Search Only)"""
-    # User requested to remove source section from response
     pass
 
 
+def display_recommendations_panel(recommendations: list):
+    if not recommendations:
+        return
+    
+    st.sidebar.markdown("---")
+    st.sidebar.subheader("🛍️ Recommended for You")
+    
+    for product in recommendations:
+        with st.sidebar.expander(f"{product.get('name', 'Product')}"):
+            st.markdown(f"**${product.get('price', 'N/A')}**")
+            st.markdown(f"⭐ {product.get('rating', 'N/A')}/5")
+            st.markdown(f"*{product.get('description', '')}*")
+            if product.get('stock') == 'in-stock':
+                st.success("✅ In Stock")
+            st.markdown(f"_Category: {product.get('category', 'N/A')}_")
+
+
 def initialize_session_state():
-    """Initialize Streamlit session state"""
     if 'chat_manager' not in st.session_state:
         st.session_state.chat_manager = ChatManager()
         
     if 'current_session_id' not in st.session_state:
-        # Create new session on first load
         session_id = st.session_state.chat_manager.create_session()
         st.session_state.current_session_id = session_id
         st.session_state.chat_history = []
@@ -180,10 +164,21 @@ def initialize_session_state():
         
     if 'rag_initialized' not in st.session_state:
         st.session_state.rag_initialized = False
+    
+    if 'recommendation_engine' not in st.session_state:
+        st.session_state.recommendation_engine = None
+        
+    if 'messages_since_recommendation' not in st.session_state:
+        st.session_state.messages_since_recommendation = 0
+        
+    if 'user_profile' not in st.session_state:
+        st.session_state.user_profile = {}
+        
+    if 'show_recommendations' not in st.session_state:
+        st.session_state.show_recommendations = True
 
 
 def load_chat_session(session_id: str):
-    """Load a specific chat session"""
     session = st.session_state.chat_manager.load_session(session_id)
     if session:
         st.session_state.current_session_id = session_id
@@ -192,33 +187,27 @@ def load_chat_session(session_id: str):
 
 
 def create_new_chat():
-    """Create and switch to a new chat session"""
-    # Check if current session is already empty
     if not st.session_state.chat_history:
         return
 
     session_id = st.session_state.chat_manager.create_session()
     st.session_state.current_session_id = session_id
     st.session_state.chat_history = []
+    st.session_state.messages_since_recommendation = 0
+    st.session_state.user_profile = {}
     st.rerun()
 
 
 def render_sidebar():
-    """Render sidebar with configuration options"""
     with st.sidebar:
         st.title("⚙️ Configuration")
         
-        # Chat History Section
         st.subheader("💬 Chat History")
         if st.button("➕ New Chat", use_container_width=True):
             create_new_chat()
             
         st.divider()
-        
-        # Previous chats list hidden as per user request
-        # Only "New Chat" option is shown above
-        
-        # LLM Provider Selection
+    
         st.subheader("LLM Provider")
         
         available_providers = []
@@ -245,7 +234,6 @@ GEMINI_API_KEY=your_key_here
             index=0
         )
         
-        # Response Mode
         st.subheader("Response Mode")
         response_mode = st.radio(
             "Select response style",
@@ -262,23 +250,18 @@ GEMINI_API_KEY=your_key_here
             help="Search the web when knowledge base doesn't have answer"
         )
         
-        # Knowledge Base Info
-        st.divider()
-        st.subheader("📚 Knowledge Base")
-        if st.session_state.rag_pipeline:
-            num_chunks = len(st.session_state.rag_pipeline.chunks)
-            st.success(f"✅ Loaded {num_chunks} document chunks")
-        else:
-            st.info("Knowledge base not loaded")
-            if st.button("Load Knowledge Base"):
-                st.session_state.rag_pipeline = initialize_rag_pipeline()
-                st.session_state.rag_initialized = True
-                st.rerun()
+        # Personalization Toggle
+        st.session_state.show_recommendations = st.checkbox(
+            "Personalized Recommendations",
+            value=True,
+            help="Get AI-powered product suggestions based on your interests"
+        )
         
-        # Clear Chat Button (Current Session)
         st.divider()
         if st.button("🗑️ Clear Current Chat", use_container_width=True):
             st.session_state.chat_history = []
+            st.session_state.messages_since_recommendation = 0
+            st.session_state.user_profile = {}
             # Update storage
             st.session_state.chat_manager.save_session(
                 st.session_state.current_session_id,
@@ -294,8 +277,6 @@ GEMINI_API_KEY=your_key_here
 
 
 def main():
-    """Main application"""
-    # Page configuration
     st.set_page_config(
         page_title=config.APP_TITLE,
         page_icon="🛍️",
@@ -303,7 +284,6 @@ def main():
         initial_sidebar_state="expanded"
     )
     
-    # Custom CSS for better aesthetics
     st.markdown("""
     <style>
         .main-title {
@@ -326,22 +306,24 @@ def main():
     </style>
     """, unsafe_allow_html=True)
     
-    # Initialize session state
     initialize_session_state()
     
-    # Initialize RAG pipeline on first load
     if not st.session_state.rag_initialized:
         st.session_state.rag_pipeline = initialize_rag_pipeline()
         st.session_state.rag_initialized = True
     
-    # Render sidebar and get configuration
+    if st.session_state.recommendation_engine is None and st.session_state.show_recommendations:
+        try:
+            st.session_state.recommendation_engine = RecommendationEngine()
+            logger.info("Recommendation engine initialized")
+        except Exception as e:
+            logger.warning(f"Failed to initialize recommendation engine: {str(e)}")
+    
     provider, response_mode, use_web_search = render_sidebar()
     
-    # Main content area
     st.markdown(f'<h1 class="main-title">{config.APP_TITLE}</h1>', unsafe_allow_html=True)
     st.markdown(f'<p class="subtitle">{config.APP_DESCRIPTION}</p>', unsafe_allow_html=True)
     
-    # Check if provider is available
     if not provider:
         st.warning("⚠️ Please configure at least one API key to use the chatbot.")
         st.markdown("""
@@ -361,13 +343,36 @@ def main():
         """)
         return
     
-    # Initialize LLM client
     llm_client = get_llm_client(provider)
     
     if not llm_client:
         return
     
-    # Display chat messages
+    if (st.session_state.show_recommendations and 
+        st.session_state.recommendation_engine and 
+        st.session_state.chat_history):
+        
+        try:
+            st.session_state.user_profile = st.session_state.recommendation_engine.analyze_user_behavior(
+                st.session_state.chat_history
+            )
+            
+            if st.session_state.recommendation_engine.should_show_recommendations(
+                st.session_state.user_profile,
+                st.session_state.messages_since_recommendation
+            ):
+                recommendations = st.session_state.recommendation_engine.get_product_recommendations(
+                    st.session_state.user_profile,
+                    limit=config.RECOMMENDATION_DISPLAY_LIMIT,
+                    llm_client=llm_client
+                )
+                
+                if recommendations:
+                    display_recommendations_panel(recommendations)
+                    st.session_state.messages_since_recommendation = 0
+        except Exception as e:
+            logger.error(f"Recommendation error: {str(e)}")
+    
     for idx, message in enumerate(st.session_state.chat_history):
         role = message.get('role')
         content = message.get('content')
@@ -378,19 +383,17 @@ def main():
             if role == 'assistant' and sources:
                 display_sources(sources)
     
-    # Chat input
     if user_input := st.chat_input("Ask about products, orders, shipping, returns, or policies..."):
-        # Display user message
         with st.chat_message("user"):
             st.markdown(user_input)
         
-        # Add to chat history
         st.session_state.chat_history.append({
             "role": "user",
             "content": user_input
         })
         
-        # Generate response
+        st.session_state.messages_since_recommendation += 1
+        
         with st.chat_message("assistant"):
             with st.spinner("Thinking..."):
                 try:
@@ -406,31 +409,27 @@ def main():
                     st.markdown(response)
                     display_sources(sources)
                     
-                    # Add to chat history
                     st.session_state.chat_history.append({
                         "role": "assistant",
                         "content": response,
                         "sources": sources
                     })
                     
-                    # Save session
-                    # Update title if it's the first message
                     current_title = "New Chat"
                     if len(st.session_state.chat_history) == 2:
-                        # Use first user message as title (truncated)
                         current_title = user_input[:30] + "..." if len(user_input) > 30 else user_input
                         st.session_state.chat_manager.update_session_title(
                             st.session_state.current_session_id, 
                             current_title
                         )
                     
-                    # Save to file
                     st.session_state.chat_manager.save_session(
                         st.session_state.current_session_id,
                         {
                             "id": st.session_state.current_session_id,
-                            "title": current_title, # This might need to fetch actual title if not first msg
-                            "messages": st.session_state.chat_history
+                            "title": current_title,
+                            "messages": st.session_state.chat_history,
+                            "user_profile": st.session_state.user_profile
                         }
                     )
                     

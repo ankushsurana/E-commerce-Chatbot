@@ -1,13 +1,8 @@
-"""
-Helper Utilities Module
-Contains various helper functions for text processing and formatting
-"""
-
 import re
 from typing import Optional
 import logging
+from config.config import config
 
-# Configure logger
 logger = logging.getLogger(__name__)
 
 
@@ -27,10 +22,8 @@ def contextualize_query(query: str, history: list, llm_client) -> str:
         return query
         
     try:
-        # Get last few messages for context (last 3 turns)
         recent_history = history[-6:] if len(history) > 6 else history
         
-        # Format history for prompt
         history_str = ""
         for msg in recent_history:
             role = msg.get("role", "user")
@@ -56,7 +49,11 @@ If the query is already standalone, output it exactly as is."""
             }
         ]
         
-        contextualized = llm_client.generate_response(messages, temperature=0.1, max_tokens=100)
+        contextualized = llm_client.generate_response(
+            messages, 
+            temperature=config.CONTEXTUALIZATION_TEMPERATURE, 
+            max_tokens=config.CONTEXTUALIZATION_MAX_TOKENS
+        )
         logger.info(f"Contextualized: '{query}' -> '{contextualized}'")
         return contextualized.strip()
         
@@ -66,23 +63,10 @@ If the query is already standalone, output it exactly as is."""
 
 
 def refine_query(query: str, llm_client=None) -> str:
-    """
-    Refine user query using LLM to correct spelling and grammar
-    and extract core intent for better RAG retrieval.
-    
-    Args:
-        query: Original user query
-        llm_client: Initialized LLMClient instance (optional)
-        
-    Returns:
-        Refined query string
-    """
     try:
-        # If no LLM client provided, return original query (fallback)
         if not llm_client:
             return query
             
-        # Simple refinement prompt
         messages = [
             {
                 "role": "system", 
@@ -94,10 +78,12 @@ def refine_query(query: str, llm_client=None) -> str:
             }
         ]
         
-        # Use a low temperature for deterministic correction
-        refined_query = llm_client.generate_response(messages, temperature=0.1, max_tokens=100)
+        refined_query = llm_client.generate_response(
+            messages, 
+            temperature=config.REFINEMENT_TEMPERATURE, 
+            max_tokens=config.REFINEMENT_MAX_TOKENS
+        )
         
-        # Log the refinement if it changed
         if refined_query.lower().strip() != query.lower().strip():
             logger.info(f"Query refined: '{query}' -> '{refined_query}'")
             
@@ -109,119 +95,8 @@ def refine_query(query: str, llm_client=None) -> str:
 
 
 def format_response(response: str, mode: str = "detailed") -> str:
-    """
-    Format response based on mode
-    
-    Args:
-        response: Raw response text
-        mode: Response mode ("concise" or "detailed")
-        
-    Returns:
-        Formatted response
-    """
-    # Clean up whitespace
     response = response.strip()
     
-    # Remove excessive newlines
     response = re.sub(r'\n{3,}', '\n\n', response)
     
     return response
-
-
-def truncate_text(text: str, max_length: int = 150, suffix: str = "...") -> str:
-    """
-    Truncate text to maximum length
-    
-    Args:
-        text: Text to truncate
-        max_length: Maximum length
-        suffix: Suffix to add if truncated
-        
-    Returns:
-        Truncated text
-    """
-    if len(text) <= max_length:
-        return text
-    
-    return text[:max_length - len(suffix)].strip() + suffix
-
-
-def clean_text(text: str) -> str:
-    """
-    Clean and normalize text
-    
-    Args:
-        text: Text to clean
-        
-    Returns:
-        Cleaned text
-    """
-    # Remove multiple spaces
-    text = re.sub(r'\s+', ' ', text)
-    
-    # Remove leading/trailing whitespace
-    text = text.strip()
-    
-    return text
-
-
-def format_sources(sources: list) -> str:
-    """
-    Format source citations
-    
-    Args:
-        sources: List of source dictionaries
-        
-    Returns:
-        Formatted sources string
-    """
-    if not sources:
-        return ""
-    
-    formatted = "Sources:\n"
-    for idx, source in enumerate(sources, 1):
-        if isinstance(source, dict):
-            source_name = source.get('source', 'Unknown')
-            formatted += f"{idx}. {source_name}\n"
-        else:
-            formatted += f"{idx}. {source}\n"
-    
-    return formatted
-
-
-def estimate_tokens(text: str) -> int:
-    """
-    Rough estimation of token count (approximately 4 chars per token)
-    
-    Args:
-        text: Text to estimate
-        
-    Returns:
-        Estimated token count
-    """
-    return len(text) // 4
-
-
-def build_prompt_with_context(query: str, context: str, system_prompt: Optional[str] = None) -> str:
-    """
-    Build a complete prompt with context
-    
-    Args:
-        query: User query
-        context: Retrieved context
-        system_prompt: Optional system prompt
-        
-    Returns:
-        Complete prompt string
-    """
-    parts = []
-    
-    if system_prompt:
-        parts.append(system_prompt)
-    
-    if context:
-        parts.append(f"Context Information:\n{context}")
-    
-    parts.append(f"User Question: {query}")
-    
-    return "\n\n".join(parts)

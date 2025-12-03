@@ -1,0 +1,70 @@
+{
+  "products": [
+    {
+      "id": "prod_001",
+      "name": "Premium Wireless Noise-Cancelling Headphones",
+      "category": "electronics",
+      "price": 299.99,
+      "features": ["Bluetooth 5.0", "40-hour battery", "Active noise cancellation", "Premium sound quality"],
+      "tags": ["audio", "wireless", "premium"],
+      "rating": 4.8, 
+      "stock": "in-stock",
+      "description": "High-quality wireless headphones with superior noise cancellation for immersive audio experience"
+    },
+    {
+      "id": "prod_002",
+      "name": "Ultra-Slim 15 Business Laptop",
+      "category": "electronics",
+      "price": 1299.99,
+      "features": ["Intel i7 processor", "16GB RAM", "512GB SSD", "Full HD display"],
+      "tags": ["laptop", "business", "productivity"],
+      "rating": 4.7,
+      "stock": "in-stock",
+      "description": "Powerful and portable laptop perfect for professionals and developers"
+    },
+    {
+      "id": "prod_003",
+      "name": "Smart Fitness Tracker Watch",
+      "category": "sports",
+      "price": 199.99,
+      "features": ["Heart rate monitor", "Sleep tracking", "GPS", "Water resistant"],
+      "tags": ["fitness", "health", "wearable"],
+      "rating": 4.5,
+      "stock": "in-stock",
+      "description": "Track your fitness goals with advanced health monitoring features"
+    },
+    {
+      "id": "prod_004",
+      "name": "4K Ultra HD Smart TV 55",
+      "category": "electronics",
+      "price": 699.99,
+      "features": ["4K resolution", "HDR support", "Smart TV features", "Voice control"],
+      "tags": ["tv", "entertainment", "smart-home"],
+      "rating": 4.6,
+      "stock": "in-stock",
+      "description": "Stunning picture quality with smart features for the ultimate viewing experience"
+    },
+    {
+      "id": "prod_005",
+      "name": "Professional Chef Knife Set",
+      "category": "home",
+      "price": 149.99,
+      "features": ["High-carbon stainless steel", "Ergonomic handles", "5-piece set", "Protective case"],
+      "tags": ["kitchen", "cooking", "tools"],
+      "rating": 4.9,
+      "stock": "in-stock",
+      "description": "Premium quality knife set for home chefs and cooking enthusiasts"
+    },
+    {
+      "id": "prod_006",
+      "name": "Running Shoes - Ultra Comfort",
+      "category": "sports",
+      "price": 89.99,
+      "features": ["Cushioned sole", "Breathable mesh", "Lightweight design", "Multiple colors"],
+      "tags": ["shoes", "running", "athletic"],
+      "rating": 4.4,
+      "stock": "in-stock",
+      "description": "Comfortable and durable running shoes for athletes of all levels"
+    }
+  ]
+}
