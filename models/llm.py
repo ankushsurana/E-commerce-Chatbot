@@ -33,11 +33,38 @@ class LLMClient:
                 raise ImportError("openai package not installed. Install with: pip install openai")
         
         elif self.provider == "groq":
+            # try:
+            #     from groq import Groq
+            #     import os
+            #     api_key = config.get_api_key("groq")
+            #     os.environ["GROQ_API_KEY"] = api_key
+
+            #     self.client = Groq()
+            #     self.logger.info("Groq client initialized successfully")
+            # except ImportError:
+            #     raise ImportError("groq package not installed. Install with: pip install groq")
             try:
                 from groq import Groq
+                import os
                 api_key = config.get_api_key("groq")
-                self.client = Groq(api_key=api_key)
-                self.logger.info("Groq client initialized successfully")
+                if not api_key:
+                    raise ValueError("GROQ API key missing")
+
+                os.environ["GROQ_API_KEY"] = api_key
+                # try SDK first
+                try:
+                    self.client = Groq()
+                    self.logger.info("Groq client initialized successfully (SDK)")
+                    self._groq_use_rest = False
+                except TypeError as te:
+                    # handle httpx proxies mismatch
+                    if "proxies" in str(te).lower():
+                        self.logger.warning("Groq SDK failed due to httpx proxies incompatibility. Falling back to REST client.")
+                        self._groq_api_key = api_key
+                        self._groq_use_rest = True
+                        self.client = None
+                    else:
+                        raise
             except ImportError:
                 raise ImportError("groq package not installed. Install with: pip install groq")
         
@@ -55,23 +82,57 @@ class LLMClient:
         else:
             raise ValueError(f"Unsupported provider: {self.provider}. Choose from: openai, groq, gemini")
     
+    def _generate_groq_rest(self, messages: List[Dict[str, str]], temperature: float, max_tokens: int) -> str:
+        """
+        Minimal REST fallback for Groq chat completions.
+        """
+        api_key = getattr(self, "_groq_api_key", None) or config.get_api_key("groq")
+        if not api_key:
+            raise ValueError("GROQ API key missing for REST fallback")
+
+        url = "https://api.groq.com/openai/v1/chat/completions"
+        headers = {
+            "Authorization": f"Bearer {api_key}",
+            "Content-Type": "application/json",
+        }
+
+        payload = {
+            "model": config.get_model_name("groq"),
+            "messages": messages,
+            "temperature": temperature,
+            "max_output_tokens": max_tokens,   # Groq uses max_output_tokens naming
+            # include top_p if needed:
+            "top_p": config.TOP_P,
+        }
+
+        resp = requests.post(url, headers=headers, json=payload, timeout=30)
+        resp.raise_for_status()
+        data = resp.json()
+        # Groq's response format follows OpenAI-ish 'choices'/'message' structure in API reference
+        try:
+            # try OpenAI-like path first
+            if "choices" in data and len(data["choices"]) > 0:
+                # Groq's chat completion uses choices[0].message.content or text depending on version
+                choice = data["choices"][0]
+                if "message" in choice and "content" in choice["message"]:
+                    return choice["message"]["content"].strip()
+                elif "text" in choice:
+                    return choice["text"].strip()
+            # fallback return raw text if present
+            if "text" in data:
+                return data["text"].strip()
+        except Exception:
+            pass
+
+        # if format unexpected, return entire json as string for debugging
+        return json.dumps(data)
+    
     def generate_response(
         self, 
         messages: List[Dict[str, str]], 
         temperature: Optional[float] = None,
         max_tokens: Optional[int] = None
     ) -> str:
-        """
-        Generate response from LLM
-        
-        Args:
-            messages: List of message dictionaries with 'role' and 'content'
-            temperature: Sampling temperature (uses config default if None)
-            max_tokens: Maximum tokens in response (uses config default if None)
-            
-        Returns:
-            Generated response text
-        """
         try:
             temp = temperature if temperature is not None else config.TEMPERATURE
             tokens = max_tokens if max_tokens is not None else config.MAX_TOKENS
@@ -165,18 +226,6 @@ class LLMClient:
         conversation_history: Optional[List[Dict[str, str]]] = None,
         mode: str = "detailed"
     ) -> str:
-        """
-        High-level chat interface
-        
-        Args:
-            user_message: User's message
-            system_prompt: Optional system prompt (uses config default if not provided)
-            conversation_history: Previous conversation messages
-            mode: Response mode ("concise" or "detailed") - affects prompt and tokens
-            
-        Returns:
-            Assistant's response
-        """
         try:
             messages = []
             

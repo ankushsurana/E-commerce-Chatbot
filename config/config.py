@@ -8,7 +8,6 @@ load_dotenv()
 
 
 class Config:
-    # Try to get from Streamlit secrets first (for Cloud), then environment variables (for local)
     def _get_secret(key: str, default: Optional[str] = None) -> Optional[str]:
         try:
             return st.secrets.get(key, os.getenv(key, default))
@@ -64,7 +63,7 @@ Provide SHORT, CONCISE, and ACCURATE answers. Keep responses under 2-3 sentences
 Answer naturally as if the information is your own knowledge.
 Do NOT say "according to the knowledge base" or "based on the provided context".
 Base your answers STRICTLY on the provided context but do not explicitly mention it.
-Be clear, direct, and professional."""
+Be clear, direct, and professional.Always aim to solve the customer's query quickly and politely."""
     
     DETAILED_SYSTEM_PROMPT: str = """You are a knowledgeable e-commerce customer support assistant.
 Provide DETAILED, ACCURATE, and CLEAR answers.
@@ -72,7 +71,8 @@ Answer naturally as if the information is your own knowledge.
 Do NOT say "according to the knowledge base" or "based on the provided context".
 Base your answers STRICTLY on the provided context but do not explicitly mention it.
 Include relevant details and step-by-step instructions where applicable.
-Be professional, friendly, and ensure the customer understands the information clearly."""
+Be professional, friendly, and ensure the customer understands the information clearly.
+Your goal is to ensure the customer feels confident that their problem is solved."""
     
     MAX_RECOMMENDATIONS: int = int(os.getenv("MAX_RECOMMENDATIONS", "5"))
     RECOMMENDATION_DISPLAY_LIMIT: int = int(os.getenv("RECOMMENDATION_DISPLAY_LIMIT", "3"))

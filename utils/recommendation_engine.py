@@ -161,7 +161,42 @@ class RecommendationEngine:
         intent = user_profile.get("purchase_intent", 0)
         score *= (1 + intent)
         
-        return recommended[:limit]
+        return min(score, 1.0)
+    
+    def generate_promotion_message(
+        self, 
+        recommendations: List[Dict],
+        llm_client = None
+    ) -> str:
+        if not recommendations:
+            return ""
+        
+        if llm_client:
+            try:
+                product_names = [p.get("name") for p in recommendations[:3]]
+                
+                prompt = f"""Generate a friendly, natural product recommendation message for these products:
+{', '.join(product_names)}
+
+Make it conversational and helpful, not pushy. 2-3 sentences."""
+                
+                messages = [{"role": "user", "content": prompt}]
+                message = llm_client.generate_response(
+                    messages, 
+                    temperature=config. RECOMMENDATION_TEMPERATURE, 
+                    max_tokens=config.RECOMMENDATION_MAX_TOKENS
+                )
+                return message.strip()
+            
+            except Exception as e:
+                self.logger.error(f"LLM generation failed: {str(e)}")
+        
+        top_product = recommendations[0]
+        return (
+            f"Based on your interests, you might like **{top_product['name']}** "
+            f"({top_product.get('category', 'Product')}). "
+            f"It's currently {top_product.get('stock', 'available')} at ${top_product.get('price', 'N/A')}."
+        )
     
     def should_show_recommendations(
         self, 
