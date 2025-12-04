@@ -111,26 +111,11 @@ Place `.txt` or `.pdf` files in the `data/` directory. The RAG pipeline will aut
 - Safe content filtering for web search
 - Environment-based secrets management
 
-## Deployment
-
-### Streamlit Cloud
-1. Push code to GitHub
-2. Connect repository at streamlit.io/cloud
-3. Set environment variables in deployment settings
-4. Deploy with one click
-
-### Docker
-```bash
-docker build -t chatbot .
-docker run -p 8501:8501 --env-file .env chatbot
-```
-
 ## Compliance
 
 - **GDPR**: Data export, deletion, and retention features
 - **CCPA**: No data sale, transparent collection
 - **PII Protection**: Automatic sanitization in logs
-- See `PRIVACY.md` for complete privacy policy
 
 ## Performance
 
